@@ -7,6 +7,7 @@ import { Component, VERSION } from '@angular/core';
 })
 export class AppComponent  {
   name = 'Angular ' + VERSION.major;
+  test = 'Angular ' + VERSION.major;
 
   hello = {type: 'hello', inputs: {name: this.name}};
 }

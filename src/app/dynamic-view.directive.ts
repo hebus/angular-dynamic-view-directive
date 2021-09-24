@@ -21,6 +21,7 @@ export class DynamicViewDirective implements OnInit, OnChanges, OnDestroy {
   @Input('dynamicViewRecord') test:string;
 
   viewRef: ViewRef;
+  // compRef: ComponentRef<any>;
 
   constructor(
     private cfr: ComponentFactoryResolver,
@@ -33,7 +34,8 @@ export class DynamicViewDirective implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.view && !changes.view.isFirstChange()) {
+    if (changes.test && !changes.test.isFirstChange()) {
+      // this.compRef.instance.name = this.test;
       this.resolveContentType();
     }
   }
@@ -43,11 +45,14 @@ export class DynamicViewDirective implements OnInit, OnChanges, OnDestroy {
     const component: any = ComponentsFactory.getComponentType(this.view.type);
     if (component) {
       const compFactory = this.cfr.resolveComponentFactory(component);
-      const compRef: ComponentRef<any> = this.vcr.createComponent(compFactory);
+      // this.compRef = this.vcr.createComponent(compFactory);
+      // this.compRef.instance.name = this.test;
+      const compRef: ComponentRef<any>  = this.vcr.createComponent(compFactory);
+      compRef.instance.name = this.test;
 
-      Object.keys(this.view.inputs).forEach(
-        (input) => (compRef.instance[input] = this.view.inputs[input])
-      );
+      // Object.keys(this.view.inputs).forEach(
+      //   (input) => (compRef.instance[input] = this.view.inputs[input])
+      // );
 
       this.viewRef = compRef.hostView;
       this.viewRef.detectChanges();
